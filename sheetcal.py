@@ -38,17 +38,19 @@ def main():
 
     # Call the Sheets API
     sheet = sheets_svc.spreadsheets()
-    result = sheet.values().get(spreadsheetId=SHEET_ID,
+    mocks = sheet.values().get(spreadsheetId=SHEET_ID,
                                 range=RANGE_NAME).execute()
-    values = result.get('values', [])
+    values = mocks.get('values', [])
 
     if not values:
         print('No data found.')
     else:
-        print('Name, Major:')
         for row in values:
-            # Print columns A and E, which correspond to indices 0 and 4.
-            print(f'{row}')
+            try:
+                dt = datetime.datetime.strptime(row[0], '%a %d.%m %H:%M').replace(year = datetime.datetime.now().year)
+                print(f'{dt}')
+            except ValueError:
+                pass
 
 
     calendar_svc = build('calendar', 'v3', credentials=creds)
