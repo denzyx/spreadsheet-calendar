@@ -37,7 +37,8 @@ def add_mock_event(calendar_svc, row):
                                                           timeMin=start_time.isoformat(), timeMax=(start_time + MOCK_DURATION).isoformat(), q=f'{MOCK_TOPIC_TAG}', singleEvents=True).execute().get('items', [])
         mock_description = f'{mock_title}'
         for i in range(3, len(row)):
-            mock_description += f'\n\n{row[i]}'
+            if row[i]:
+                mock_description += f'\n\n{row[i]}'
         new_mock_event = {
             'summary': f'{mock_title}',
             'description': mock_description,
@@ -58,7 +59,7 @@ def add_mock_event(calendar_svc, row):
             },
         }
         if existing_mock_events:
-            print(f'Updating existing event {existing_mock_events} with {row}')
+            print(f'Updating existing event:\n{existing_mock_events}\nwith the following:\n{row}\n')
             calendar_svc.events().update(calendarId='primary',
                                          eventId=existing_mock_events[0]['id'], body=new_mock_event).execute()
         else:
