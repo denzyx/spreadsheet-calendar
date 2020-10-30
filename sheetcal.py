@@ -23,7 +23,7 @@ MOCK_TIMEZONE = 'Europe/Berlin'
 
 
 def add_mock_event(calendar_svc, row):
-    if not row or len(row) == 0:
+    if not row or len(row) < 3:
         return
     mock_title = f'{MOCK_TOPIC_TAG}: {row[1]} vs {row[2]}'
     try:
