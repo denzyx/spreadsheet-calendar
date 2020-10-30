@@ -1,7 +1,7 @@
 # sheetcal
 An ugly script to create events with reminders in Google Calendar for upcoming public mocks (for https://t.me/FaangInterview).
 
-## What you need to make it work
+## Prerequisites
 * Python3
 * Install necessary modules:
 
