@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import os
+import os.path
 from datetime import datetime, timedelta
 from pytz import timezone
 import sys
@@ -14,8 +14,8 @@ SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly',
           'https://www.googleapis.com/auth/calendar.events']
 
 # The ID and range of the public mocks_in_sheet spreadsheet.
-SHEET_ID = os.environ['SHEET_ID']
-RANGE_NAME = 'A4:F8'
+SHEET_ID = '18odJizS8jKHVpXHzItAyTTR7djOrcyk2Gi3Za4krtmg'
+RANGE_NAME = 'A4:E8'
 
 MOCK_TOPIC_TAG = 'Mock Interview'
 MOCK_DURATION = timedelta(hours=1)
@@ -35,9 +35,14 @@ def add_mock_event(calendar_svc, row):
             return
         existing_mock_events = calendar_svc.events().list(calendarId='primary',
                                                           timeMin=start_time.isoformat(), timeMax=(start_time + MOCK_DURATION).isoformat(), q=f'{MOCK_TOPIC_TAG}', singleEvents=True).execute().get('items', [])
+        if existing_mock_events:
+            print(f'Skipping existing event {row}')
+            return
         mock_description = f'{mock_title}'
-        for i in range(3, len(row)):
-            mock_description += f'\n\n{row[i]}'
+        if len(row) >= 4:
+            mock_description += f'\n\n{row[3]}'
+            if len(row) >= 5:
+                mock_description += f'\n\n{row[4].removeprefix("Description:")}'
         new_mock_event = {
             'summary': f'{mock_title}',
             'description': mock_description,
@@ -57,13 +62,7 @@ def add_mock_event(calendar_svc, row):
                 ],
             },
         }
-        if existing_mock_events:
-            print(f'Updating existing event {existing_mock_events} with {row}')
-            calendar_svc.events().update(calendarId='primary',
-                                         eventId=existing_mock_events[0]['id'], body=new_mock_event).execute()
-        else:
-            print(f'Creating a new event {row}')
-            calendar_svc.events().insert(calendarId='primary', body=new_mock_event).execute()
+        calendar_svc.events().insert(calendarId='primary', body=new_mock_event).execute()
     except Exception as e:
         print(e, file=sys.stderr)
 
@@ -106,7 +105,7 @@ def main():
     now = datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
     future_mocks_in_calendar = calendar_svc.events().list(calendarId='primary',
                                                           timeMin=now, q=f'{MOCK_TOPIC_TAG}', singleEvents=True).execute().get('items', [])
-    print('\nFuture mocks in your calendar:')
+    print("Future mocks in calendar:")
     for event in future_mocks_in_calendar:
         start = event['start'].get('dateTime', event['start'].get('date'))
         print(start, event['summary'])
