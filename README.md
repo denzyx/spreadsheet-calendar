@@ -12,6 +12,8 @@ Run it with the mock schedule spreadsheet id as follows:
 
  ```SHEETS_ID=... python3 sheetcal.py```
 
-When run for the first time, the script will ask to authorize the project to use Google Calendar and Google Sheets. It will read the spreadsheet and create events in your primary calendar. It won't create duplicates, so it can be launched many times.
+When run for the first time, the script will ask to authorize the project to use Google Calendar and Google Sheets. It will read the spreadsheet and create events in your primary calendar. It won't create duplicates, so it can be launched many times. If some information has changed - the event will be updated.
 
-Current limitation is that the script is not updating events with new information, only creating new ones.
+Another thing to keep in mind is that the spreadsheet is evolving and edited by people, so you might encounter errors and could need to reconfigure some things - like cell ranges, time formats, etc. There are some constants for that at the top of the script for convenience.
+
+Disclaimer: *there is no license or any kind of warranty here, use it at your own risk.*
