@@ -18,4 +18,4 @@ When run for the first time, the script will ask to authorize the project to use
 Another thing to keep in mind is that the spreadsheet is evolving and edited by people, so you might encounter errors and could need to reconfigure some things - like cell ranges, time formats, etc. There are some constants for that at the top of the script for convenience.
 
 ## Disclaimer
-*There is no license or any kind of warranty here, use it at your own risk.*
+***There is no license or any kind of warranty here, use it at your own risk.***
